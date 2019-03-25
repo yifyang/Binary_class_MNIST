@@ -63,8 +63,9 @@ def train_epoch(train_loader, model, loss_fn, optimizer, cuda, log_interval):
             if target is not None:
                 target = target.cuda()
 
+        net_input = torch.cat(data, 1)
         optimizer.zero_grad()
-        outputs = model(*data)
+        outputs = model(net_input)
 
         loss_inputs = outputs
 
@@ -108,7 +109,8 @@ def test_epoch(val_loader, model, loss_fn, cuda):
                 if target is not None:
                     target = target.cuda()
 
-            outputs = model(*data)
+            net_input = torch.cat(data, 1)
+            outputs = model(net_input)
 
             loss_inputs = outputs
 

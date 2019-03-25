@@ -12,11 +12,7 @@ class SoftmaxNet(nn.Module):
         # Convert to a binary classification.
         self.fc2 = nn.Linear(500, 2)
 
-    def forward(self, x1, x2):
-
-        # Catenate two images as the input.
-        x = torch.cat((x1, x2), 1)
-
+    def forward(self, x):
         x = F.relu(self.conv1(x))
         x = F.max_pool2d(x, 2, 2)
         x = F.relu(self.conv2(x))
