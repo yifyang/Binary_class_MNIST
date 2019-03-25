@@ -8,10 +8,15 @@ class SoftmaxNet(nn.Module):
         self.conv1 = nn.Conv2d(2, 20, 5, 1)
         self.conv2 = nn.Conv2d(20, 50, 5, 1)
         self.fc1 = nn.Linear(4 * 4 * 50, 500)
-        self.fc2 = nn.Linear(500, 2) # Convert to a binary classification.
+
+        # Convert to a binary classification.
+        self.fc2 = nn.Linear(500, 2)
 
     def forward(self, x1, x2):
-        x = torch.cat((x1, x2), 1) # Catenate two images as the input.
+
+        # Catenate two images as the input.
+        x = torch.cat((x1, x2), 1)
+
         x = F.relu(self.conv1(x))
         x = F.max_pool2d(x, 2, 2)
         x = F.relu(self.conv2(x))

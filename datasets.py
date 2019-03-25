@@ -8,7 +8,6 @@ class SpecialMNIST(Dataset):
     Train: For each sample creates randomly a positive or a negative pair
     Test: Creates fixed pairs for testing
     """
-
     def __init__(self, mnist_dataset):
         self.mnist_dataset = mnist_dataset
 

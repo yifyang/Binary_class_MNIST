@@ -39,6 +39,17 @@ def myfit(train_loader, val_loader, model, loss_fn, optimizer, n_epochs, cuda, l
 
 
 def train_epoch(train_loader, model, loss_fn, optimizer, cuda, log_interval):
+    """
+    Used for training part.
+
+    :param train_loader
+    :param model
+    :param loss_fn
+    :param optimizer
+    :param cuda: Enable gpu or not
+    :param log_interval: print loss every batch_idx / log_interval
+    :return: train loss
+    """
     model.train()
     losses = []
     total_loss = 0
@@ -76,6 +87,15 @@ def train_epoch(train_loader, model, loss_fn, optimizer, cuda, log_interval):
 
 
 def test_epoch(val_loader, model, loss_fn, cuda):
+    """
+    Used for testing part.
+
+    :param val_loader
+    :param model
+    :param loss_fn
+    :param cuda: Enable gpu or not
+    :return: validation loss, accuracy in test set
+    """
     with torch.no_grad():
         model.eval()
         val_loss = 0
@@ -102,7 +122,7 @@ def test_epoch(val_loader, model, loss_fn, cuda):
                 len(target.data.numpy()))
 
             # make the plot of the architecture of the network
-            # with SummaryWriter(comment='Problem5') as w:
-            #     w.add_graph(model, (*data,))
+            with SummaryWriter(comment='Problem5') as w:
+                w.add_graph(model, (*data,))
 
     return val_loss, accuracy
