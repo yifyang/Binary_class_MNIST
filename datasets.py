@@ -5,8 +5,8 @@ from torch.utils.data import Dataset
 
 class SpecialMNIST(Dataset):
     """
-    Train: For each sample creates randomly a positive or a negative pair
-    Test: Creates fixed pairs for testing
+    Train: Select two pairs of a certain sample, one of positive, another one of negative
+    Test: Select testing pairs of dataset
     """
     def __init__(self, mnist_dataset):
         self.mnist_dataset = mnist_dataset

@@ -6,7 +6,7 @@ from torch.utils.data.sampler import SubsetRandomSampler
 from torchvision.datasets import MNIST
 from torchvision import transforms
 
-from trainer import myfit
+from trainer import do
 from datasets import SpecialMNIST
 from networks import SoftmaxNet
 
@@ -86,4 +86,4 @@ if __name__ == "__main__":
     loss_fn = torch.nn.NLLLoss()
     optimizer = optim.Adam(model.parameters(), lr=lr)
 
-    myfit(train_loader, test_loader, model, loss_fn, optimizer, epoch, cuda, log_interval)
+    do(train_loader, test_loader, model, loss_fn, optimizer, epoch, cuda, log_interval)

@@ -3,15 +3,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tensorboardX import SummaryWriter
 
-def myfit(train_loader, val_loader, model, loss_fn, optimizer, n_epochs, cuda, log_interval,
+def do(train_loader, val_loader, model, loss_fn, optimizer, n_epochs, cuda, log_interval,
         start_epoch=0):
     """
-    Loaders, model, loss function and metrics should work together for a given task,
-    i.e. The model should be able to process data output of loaders,
-    loss function should process target output of loaders and outputs from the model
+    Function to do the traning and testing part.
     """
     plt_train_loss = []
     plt_val_loss = []
+    plt.style.use('ggplot')
 
     for epoch in range(start_epoch, n_epochs):
 
@@ -32,7 +31,7 @@ def myfit(train_loader, val_loader, model, loss_fn, optimizer, n_epochs, cuda, l
     # make the plot of loss
     train_time = np.arange(len(plt_train_loss))
     val_time = np.arange(len(plt_val_loss))
-    cx = plt.plot(train_time, plt_train_loss, 'b', val_time, plt_val_loss, 'r')
+    cx = plt.plot(train_time, plt_train_loss, 'deepskyblue', val_time, plt_val_loss, 'darkred')
     plt.title("loss curve(red for test, blue for train)")
     plt.savefig("loss.jpg")
     plt.show()
@@ -63,6 +62,7 @@ def train_epoch(train_loader, model, loss_fn, optimizer, cuda, log_interval):
             if target is not None:
                 target = target.cuda()
 
+        # Catenate two images into one
         net_input = torch.cat(data, 1)
         optimizer.zero_grad()
         outputs = model(net_input)
@@ -77,8 +77,8 @@ def train_epoch(train_loader, model, loss_fn, optimizer, cuda, log_interval):
 
         if batch_idx % log_interval == 0:
             message = 'Train: [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                batch_idx * len(data[0]), len(train_loader.sampler),
-                100. * batch_idx / len(train_loader), np.mean(losses))
+                (batch_idx+1) * len(data[0]), len(train_loader.sampler),
+                100. * (batch_idx+1) / len(train_loader), np.mean(losses))
 
             print(message)
             losses = []
@@ -109,6 +109,7 @@ def test_epoch(val_loader, model, loss_fn, cuda):
                 if target is not None:
                     target = target.cuda()
 
+            # Catenate two images into one
             net_input = torch.cat(data, 1)
             outputs = model(net_input)
 
@@ -125,6 +126,6 @@ def test_epoch(val_loader, model, loss_fn, cuda):
 
             # make the plot of the architecture of the network
             with SummaryWriter(comment='Problem5') as w:
-                w.add_graph(model, (*data,))
+                w.add_graph(model, (torch.cat(data, 1),))
 
     return val_loss, accuracy
